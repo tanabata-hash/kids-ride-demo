@@ -149,9 +149,22 @@ function AuthLoginView() {
           <a href="#" onclick="navigate('facility-admin')" style="color:var(--text-muted); font-size:0.85rem; text-decoration:underline;">★【法人案内用】学童・提携施設ダッシュボードデモへ</a>
         </div>
       </div>
+      </div>
     </main>
   `;
 }
+
+window.previewImage = function(event) {
+  const reader = new FileReader();
+  reader.onload = function(){
+    const output = document.getElementById('profile-preview');
+    output.src = reader.result;
+    output.style.display = 'block';
+  };
+  if(event.target.files[0]) {
+    reader.readAsDataURL(event.target.files[0]);
+  }
+};
 
 function RegisterView() {
   const options = kindergartens.map(k => `<option value="${k}">${k}</option>`).join('');
@@ -165,6 +178,16 @@ function RegisterView() {
       </div>
 
       <form onsubmit="submitRegistration(event)" class="card">
+        <div class="form-group" style="text-align: center;">
+          <label>プロフィール画像（任意）</label>
+          <div style="margin: 8px auto; width: 100px; height: 100px; border-radius: 50%; background-color: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px dashed #cbd5e1; position: relative; cursor: pointer;" onclick="document.getElementById('profile-upload').click()">
+            <img id="profile-preview" src="" style="width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; z-index: 2;" />
+            <i class="ph ph-camera" style="font-size: 2rem; color: #94a3b8; position: absolute; z-index: 1;" id="camera-icon"></i>
+          </div>
+          <input type="file" name="profile_image" id="profile-upload" accept="image/*" style="display: none;" onchange="window.previewImage(event); document.getElementById('camera-icon').style.display='none';">
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">タップして画像を選択</div>
+        </div>
+
         <div class="form-group">
           <label>お名前（フルネーム）</label>
           <input type="text" name="name" class="form-control" placeholder="例: 山田 花子">
